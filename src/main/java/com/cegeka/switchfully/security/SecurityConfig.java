@@ -25,6 +25,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().httpBasic()
                 .authenticationEntryPoint(authEntryPoint);
+//                .and().authorizeRequests()
+//                .antMatchers("/armies/discharge/**").hasRole("HUMAN_RELATIONSHIPS")
+//                .antMatchers("/armies/promote/**").hasRole("HUMAN_RELATIONSHIPS")
+//                .antMatchers("/armies/nuke").hasRole("GENERAL")
+//                .antMatchers("/armies/**").hasAnyRole("PRIVATE", "GENERAL")
+//                .antMatchers("/armies/").hasRole("CIVILIAN");
     }
 
     @Autowired
