@@ -11,6 +11,8 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
+import static org.springframework.http.HttpMethod.*;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -24,13 +26,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().httpBasic()
-                .authenticationEntryPoint(authEntryPoint);
-//                .and().authorizeRequests()
-//                .antMatchers("/armies/discharge/**").hasRole("HUMAN_RELATIONSHIPS")
-//                .antMatchers("/armies/promote/**").hasRole("HUMAN_RELATIONSHIPS")
-//                .antMatchers("/armies/nuke").hasRole("GENERAL")
-//                .antMatchers("/armies/**").hasAnyRole("PRIVATE", "GENERAL")
-//                .antMatchers("/armies/").hasRole("CIVILIAN");
+                .authenticationEntryPoint(authEntryPoint)
+                .and().authorizeRequests()
+                .antMatchers(POST,"/armies/discharge/**","/armies/promote/**").hasRole("HUMAN_RELATIONSHIPS")
+                .antMatchers(GET,"/armies/nuke").hasRole("GENERAL")
+                .antMatchers(GET,"/armies/**").hasAnyRole("PRIVATE", "GENERAL")
+                .antMatchers(POST,"/armies").hasRole("CIVILIAN")
+                .antMatchers(GET,"/armies/tanks").hasAnyRole("GENERAL","PRIVATE","CIVILIAN")
+                .antMatchers(POST,"/armies/tanks").hasRole("PRIVATE")
+                .antMatchers(DELETE,"/armies/tanks").hasRole("GENERAL")
+                .antMatchers(PUT,"/armies/tanks").hasAnyRole("PRIVATE","GENERAL")
+
+
+
+
+        ;
     }
 
     @Autowired
