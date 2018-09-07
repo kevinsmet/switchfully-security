@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.cegeka.switchfully.security.external.authentication.Feature.getFeatureForRoles;
 import static com.google.common.collect.Lists.newArrayList;
 
 public class ArmyAuthentication implements Authentication {
@@ -17,10 +18,10 @@ public class ArmyAuthentication implements Authentication {
     private List<SimpleGrantedAuthority> roles = newArrayList();
     private boolean isAuthenticated = true;
 
-    public ArmyAuthentication(String username, String credentials, List<String> roles) {
+    public ArmyAuthentication(String username, String credentials, List<String> rollen) {
         this.username = username;
-        this.roles = roles.stream()
-                .map(SimpleGrantedAuthority::new)
+        this.roles = getFeatureForRoles(rollen).stream()
+                .map(feature -> new SimpleGrantedAuthority(feature.name()))
                 .collect(Collectors.toList());
         this.credentials = credentials;
     }
